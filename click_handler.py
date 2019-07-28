@@ -4,11 +4,9 @@ class ClickHandler():
     POSITION_LIST = []
     X_O = 'X'
     def __init__(self, how_much_blocks):
+        list_to_append = lambda lst,num:[lst.append(i) for i in range(num)]
         for i in range(how_much_blocks):
-            list_to_append = []
-            for i in range(how_much_blocks):
-                list_to_append.append(None)
-            ClickHandler.POSITION_LIST.append(list_to_append)
+            ClickHandler.POSITION_LIST.append(list_to_append([],how_much_blocks))
 
     @staticmethod
     def write_value_to_screen(screen,pos):
@@ -19,13 +17,10 @@ class ClickHandler():
             else:
                 ClickHandler.write_O(screen, row_col)
 
+            if WinnerChecker.check_for_winner(ClickHandler.POSITION_LIST):
+                ClickHandler.print_winner(screen)
+
             ClickHandler.X_O = ClickHandler.check_next_contender()
-        if WinnerChecker.check_for_winner(ClickHandler.POSITION_LIST):
-            text = 'won'
-            font = pygame.font.Font(None, 30)
-            text = font.render(text, True, (255,255,255))
-            screen.blit(text,(150,150))
-            pygame.display.flip()
             
 
     @staticmethod
@@ -69,3 +64,10 @@ class ClickHandler():
             return ('O')
         return ('X')
         
+    @staticmethod
+    def print_winner(screen):
+        text = 'Player {} WON !!'.format(ClickHandler.X_O)
+        font = pygame.font.Font(None, 30)
+        text = font.render(text, True, (255,0,0))
+        screen.blit(text,(150,150))
+        pygame.display.flip()
